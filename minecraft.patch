@@ -1,0 +1,2252 @@
+Only in C:\Users\micha\RetroMCP\src/minecraft/net/minecraft: a
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/controller/PlayerController.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/controller/PlayerController.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/controller/PlayerController.java	2022-01-19 17:51:48.201395300 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/controller/PlayerController.java	2022-01-19 17:34:54.564828700 -0500
+@@ -3,7 +3,7 @@
+ import net.minecraft.client.Minecraft;
+ import net.minecraft.client.sound.SoundManager;
+ import net.minecraft.game.entity.player.EntityPlayer;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.block.StepSound;
+ 
+@@ -21,7 +21,7 @@
+ 
+ 	public boolean sendBlockRemoved(int var1, int var2, int var3) {
+ 		this.mc.effectRenderer.addBlockDestroyEffects(var1, var2, var3);
+-		ChunkProviderGenerate var4 = this.mc.theWorld;
++		World var4 = this.mc.theWorld;
+ 		Block var5 = Block.blocksList[var4.getBlockAt(var1, var2, var3)];
+ 		int var6 = var4.c(var1, var2, var3);
+ 		boolean var7 = var4.b(var1, var2, var3, 0);
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EffectRenderer.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EffectRenderer.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EffectRenderer.java	2022-01-19 17:51:49.416393700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EffectRenderer.java	2022-01-19 17:34:54.082831200 -0500
+@@ -6,18 +6,18 @@
+ import net.minecraft.client.render.RenderEngine;
+ import net.minecraft.client.render.Tessellator;
+ import net.minecraft.game.entity.Entity;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import org.lwjgl.opengl.GL11;
+ import util.MathHelper;
+ 
+ public final class EffectRenderer {
+-	private ChunkProviderGenerate worldObj;
++	private World worldObj;
+ 	private List[] fxLayers = new List[3];
+ 	private RenderEngine renderEngine;
+ 	private Random rand = new Random();
+ 
+-	public EffectRenderer(ChunkProviderGenerate var1, RenderEngine var2) {
++	public EffectRenderer(World var1, RenderEngine var2) {
+ 		if(var1 != null) {
+ 			this.worldObj = var1;
+ 		}
+@@ -94,7 +94,7 @@
+ 		}
+ 	}
+ 
+-	public final void a(ChunkProviderGenerate var1) {
++	public final void a(World var1) {
+ 		this.worldObj = var1;
+ 
+ 		for(int var2 = 0; var2 < 3; ++var2) {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityBubbleFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityBubbleFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityBubbleFX.java	2022-01-19 17:51:48.218395000 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityBubbleFX.java	2022-01-19 17:34:54.164829900 -0500
+@@ -1,11 +1,11 @@
+ package net.minecraft.client.effect;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ import util.MathHelper;
+ 
+ public final class EntityBubbleFX extends EntityFX {
+-	public EntityBubbleFX(ChunkProviderGenerate var1, double var2, double var4, double var6, double var8, double var10, double var12) {
++	public EntityBubbleFX(World var1, double var2, double var4, double var6, double var8, double var10, double var12) {
+ 		super(var1, var2, var4, var6, var8, var10, var12);
+ 		this.particleRed = 1.0F;
+ 		this.particleGreen = 1.0F;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityDiggingFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityDiggingFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityDiggingFX.java	2022-01-19 17:51:48.224394700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityDiggingFX.java	2022-01-19 17:34:54.196827600 -0500
+@@ -1,11 +1,11 @@
+ package net.minecraft.client.effect;
+ 
+ import net.minecraft.client.render.Tessellator;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ 
+ public final class EntityDiggingFX extends EntityFX {
+-	public EntityDiggingFX(ChunkProviderGenerate var1, double var2, double var4, double var6, double var8, double var10, double var12, Block var14) {
++	public EntityDiggingFX(World var1, double var2, double var4, double var6, double var8, double var10, double var12, Block var14) {
+ 		super(var1, var2, var4, var6, var8, var10, var12);
+ 		this.particleTextureIndex = var14.blockID;
+ 		this.particleGravity = var14.material;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityExplodeFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityExplodeFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityExplodeFX.java	2022-01-19 17:51:48.230405700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityExplodeFX.java	2022-01-19 17:34:54.202829300 -0500
+@@ -1,10 +1,10 @@
+ package net.minecraft.client.effect;
+ 
+ import net.minecraft.client.render.Tessellator;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class EntityExplodeFX extends EntityFX {
+-	public EntityExplodeFX(ChunkProviderGenerate var1, double var2, double var4, double var6, double var8, double var10, double var12) {
++	public EntityExplodeFX(World var1, double var2, double var4, double var6, double var8, double var10, double var12) {
+ 		super(var1, var2, var4, var6, var8, var10, var12);
+ 		this.motionX = var8 + (double)((float)(Math.random() * 2.0D - 1.0D) * 0.05F);
+ 		this.motionY = var10 + (double)((float)(Math.random() * 2.0D - 1.0D) * 0.05F);
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityFlameFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityFlameFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityFlameFX.java	2022-01-19 17:51:48.236393700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityFlameFX.java	2022-01-19 17:34:54.214830700 -0500
+@@ -1,12 +1,12 @@
+ package net.minecraft.client.effect;
+ 
+ import net.minecraft.client.render.Tessellator;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class EntityFlameFX extends EntityFX {
+ 	private float Y;
+ 
+-	public EntityFlameFX(ChunkProviderGenerate var1, double var2, double var4, double var6) {
++	public EntityFlameFX(World var1, double var2, double var4, double var6) {
+ 		super(var1, var2, var4, var6, 0.0D, 0.0D, 0.0D);
+ 		this.motionX *= 0.009999999776482582D;
+ 		this.motionY *= 0.009999999776482582D;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityFX.java	2022-01-19 17:51:48.242396500 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityFX.java	2022-01-19 17:34:54.208830600 -0500
+@@ -2,7 +2,7 @@
+ 
+ import net.minecraft.client.render.Tessellator;
+ import net.minecraft.game.entity.Entity;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import util.MathHelper;
+ 
+ public class EntityFX extends Entity {
+@@ -20,7 +20,7 @@
+ 	public static double W;
+ 	public static double X;
+ 
+-	public EntityFX(ChunkProviderGenerate var1, double var2, double var4, double var6, double var8, double var10, double var12) {
++	public EntityFX(World var1, double var2, double var4, double var6, double var8, double var10, double var12) {
+ 		super(var1);
+ 		this.setSize(0.2F, 0.2F);
+ 		this.yOffset = this.height / 2.0F;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityLavaFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityLavaFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityLavaFX.java	2022-01-19 17:51:48.244396300 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityLavaFX.java	2022-01-19 17:34:54.231827900 -0500
+@@ -1,12 +1,12 @@
+ package net.minecraft.client.effect;
+ 
+ import net.minecraft.client.render.Tessellator;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class EntityLavaFX extends EntityFX {
+ 	private float Y;
+ 
+-	public EntityLavaFX(ChunkProviderGenerate var1, double var2, double var4, double var6) {
++	public EntityLavaFX(World var1, double var2, double var4, double var6) {
+ 		super(var1, var2, var4, var6, 0.0D, 0.0D, 0.0D);
+ 		this.motionX *= 0.800000011920929D;
+ 		this.motionY *= 0.800000011920929D;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityRainFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityRainFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntityRainFX.java	2022-01-19 17:51:48.246394900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntityRainFX.java	2022-01-19 17:34:54.322832200 -0500
+@@ -1,12 +1,12 @@
+ package net.minecraft.client.effect;
+ 
+ import net.minecraft.client.render.Tessellator;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ import util.MathHelper;
+ 
+ public class EntityRainFX extends EntityFX {
+-	public EntityRainFX(ChunkProviderGenerate var1, double var2, double var4, double var6) {
++	public EntityRainFX(World var1, double var2, double var4, double var6) {
+ 		super(var1, var2, var4, var6, 0.0D, 0.0D, 0.0D);
+ 		this.motionX *= 0.30000001192092896D;
+ 		this.motionY = (double)((float)Math.random() * 0.2F + 0.1F);
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntitySmokeFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntitySmokeFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntitySmokeFX.java	2022-01-19 17:51:48.252398100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntitySmokeFX.java	2022-01-19 17:34:54.420852600 -0500
+@@ -1,16 +1,16 @@
+ package net.minecraft.client.effect;
+ 
+ import net.minecraft.client.render.Tessellator;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class EntitySmokeFX extends EntityFX {
+ 	private float Y;
+ 
+-	public EntitySmokeFX(ChunkProviderGenerate var1, double var2, double var4, double var6) {
++	public EntitySmokeFX(World var1, double var2, double var4, double var6) {
+ 		this(var1, var2, var4, var6, 1.0F);
+ 	}
+ 
+-	public EntitySmokeFX(ChunkProviderGenerate var1, double var2, double var4, double var6, float var8) {
++	public EntitySmokeFX(World var1, double var2, double var4, double var6, float var8) {
+ 		super(var1, var2, var4, var6, 0.0D, 0.0D, 0.0D);
+ 		this.motionX *= 0.10000000149011612D;
+ 		this.motionY *= 0.10000000149011612D;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntitySplashFX.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntitySplashFX.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/effect/EntitySplashFX.java	2022-01-19 17:51:48.257400900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/effect/EntitySplashFX.java	2022-01-19 17:34:54.426833000 -0500
+@@ -1,9 +1,9 @@
+ package net.minecraft.client.effect;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class EntitySplashFX extends EntityRainFX {
+-	public EntitySplashFX(ChunkProviderGenerate var1, double var2, double var4, double var6) {
++	public EntitySplashFX(World var1, double var2, double var4, double var6) {
+ 		super(var1, var2, var4, var6);
+ 		this.particleGravity = 0.04F;
+ 		++this.particleTextureIndex;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/gui/GuiIngame.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/gui/GuiIngame.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/gui/GuiIngame.java	2022-01-19 17:51:49.473396400 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/gui/GuiIngame.java	2022-01-19 17:34:54.441835400 -0500
+@@ -10,7 +10,7 @@
+ import net.minecraft.client.render.entity.RenderItem;
+ import net.minecraft.game.entity.player.InventoryPlayer;
+ import net.minecraft.game.item.ItemStack;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import org.lwjgl.opengl.GL11;
+ 
+ public final class GuiIngame extends Gui {
+@@ -158,7 +158,7 @@
+ 			var23 = this.mc;
+ 			var4.drawStringWithShadow(this.mc.renderGlobal.getDebugInfoEntities(), 2, 22, 16777215);
+ 			var23 = this.mc;
+-			var4.drawStringWithShadow("P: " + var23.effectRenderer.getStatistics() + ". T: " + ChunkProviderGenerate.a(), 2, 32, 16777215);
++			var4.drawStringWithShadow("P: " + var23.effectRenderer.getStatistics() + ". T: " + World.a(), 2, 32, 16777215);
+ 			long var24 = Runtime.getRuntime().maxMemory();
+ 			long var27 = Runtime.getRuntime().totalMemory();
+ 			long var28 = Runtime.getRuntime().freeMemory();
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/gui/GuiLoadLevel.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/gui/GuiLoadLevel.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/gui/GuiLoadLevel.java	2022-01-19 17:51:48.322399900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/gui/GuiLoadLevel.java	2022-01-19 17:34:54.448834500 -0500
+@@ -9,7 +9,7 @@
+ import java.io.InputStreamReader;
+ import java.net.URL;
+ import net.minecraft.client.PlayerLoader;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public class GuiLoadLevel extends GuiScreen implements Runnable {
+ 	private GuiScreen parent;
+@@ -129,7 +129,7 @@
+ 			FileInputStream var3 = new FileInputStream(var1);
+ 			new PlayerLoader(this.mc, this.mc.loadingScreen);
+ 			var3.close();
+-			this.mc.a((ChunkProviderGenerate)null);
++			this.mc.a((World)null);
+ 		} catch (IOException var2) {
+ 			var2.printStackTrace();
+ 		}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/Minecraft.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/Minecraft.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/Minecraft.java	2022-01-19 17:51:49.378396100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/Minecraft.java	2022-01-19 17:34:54.552828600 -0500
+@@ -41,7 +41,7 @@
+ import net.minecraft.game.item.Item;
+ import net.minecraft.game.item.ItemStack;
+ import net.minecraft.game.physics.MovingObjectPosition;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.terrain.LevelGenerator;
+ import org.lwjgl.BufferUtils;
+@@ -64,7 +64,7 @@
+ 	public int displayHeight;
+ 	private OpenGlCapsChecker glCapabilities;
+ 	private Timer timer = new Timer(20.0F);
+-	public ChunkProviderGenerate theWorld;
++	public World theWorld;
+ 	public RenderGlobal renderGlobal;
+ 	public EntityPlayerSP thePlayer;
+ 	public EffectRenderer effectRenderer;
+@@ -285,7 +285,7 @@
+ 			this.renderGlobal = new RenderGlobal(this, this.renderEngine);
+ 			GL11.glViewport(0, 0, this.displayWidth, this.displayHeight);
+ 			if(this.server != null && this.session != null) {
+-				ChunkProviderGenerate var31 = new ChunkProviderGenerate();
++				World var31 = new World();
+ 				this.a(var31);
+ 			} else if(this.theWorld == null) {
+ 				this.displayGuiScreen(new GuiMainMenu());
+@@ -424,7 +424,7 @@
+ 
+ 			ItemStack var2;
+ 			int var3;
+-			ChunkProviderGenerate var5;
++			World var5;
+ 			if(var1 == 1 && (var2 = this.thePlayer.inventory.getCurrentItem()) != null) {
+ 				var3 = var2.stackSize;
+ 				EntityPlayerSP var7 = this.thePlayer;
+@@ -768,14 +768,14 @@
+ 	}
+ 
+ 	public final void generateLevel(int var1, int var2, int var3, int var4) {
+-		this.a((ChunkProviderGenerate)null);
++		this.a((World)null);
+ 		System.gc();
+ 		new LevelGenerator();
+-		ChunkProviderGenerate var5 = new ChunkProviderGenerate();
++		World var5 = new World();
+ 		this.a(var5);
+ 	}
+ 
+-	public final void a(ChunkProviderGenerate var1) {
++	public final void a(World var1) {
+ 		try {
+ 			BufferedReader var2;
+ 			Integer.parseInt((var2 = new BufferedReader(new InputStreamReader((new URL(this.mcApplet.getDocumentBase() + "?n=" + this.session.username + "&i=" + this.session.sessionId)).openStream()))).readLine());
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/player/EntityPlayerSP.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/player/EntityPlayerSP.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/player/EntityPlayerSP.java	2022-01-19 17:51:48.440399700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/player/EntityPlayerSP.java	2022-01-19 17:34:54.315830600 -0500
+@@ -8,14 +8,14 @@
+ import net.minecraft.game.IInventory;
+ import net.minecraft.game.entity.player.EntityPlayer;
+ import net.minecraft.game.item.ItemStack;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.tileentity.TileEntityFurnace;
+ 
+ public class EntityPlayerSP extends EntityPlayer {
+ 	public MovementInput movementInput;
+ 	private Minecraft mc;
+ 
+-	public EntityPlayerSP(Minecraft var1, ChunkProviderGenerate var2, Session var3) {
++	public EntityPlayerSP(Minecraft var1, World var2, Session var3) {
+ 		super(var2);
+ 		this.mc = var1;
+ 		if(var3 != null) {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/entity/Render.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/entity/Render.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/entity/Render.java	2022-01-19 17:51:49.685305500 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/entity/Render.java	2022-01-19 17:34:54.571829300 -0500
+@@ -5,7 +5,7 @@
+ import net.minecraft.client.render.RenderEngine;
+ import net.minecraft.client.render.Tessellator;
+ import net.minecraft.game.entity.Entity;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import org.lwjgl.opengl.GL11;
+ import util.MathHelper;
+@@ -52,7 +52,7 @@
+ 				GL11.glEnable(GL11.GL_BLEND);
+ 				RenderEngine var67 = this.renderManager.renderEngine;
+ 				RenderEngine.bindTexture(this.renderManager.renderEngine.getTexture("%%/shadow.png"));
+-				ChunkProviderGenerate var10 = this.renderManager.worldObj;
++				World var10 = this.renderManager.worldObj;
+ 				GL11.glDepthMask(false);
+ 				var11 = this.shadowSize;
+ 				var68 = MathHelper.floor_double(var2 - (double)var11);
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/entity/RenderManager.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/entity/RenderManager.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/entity/RenderManager.java	2022-01-19 17:51:49.740306800 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/entity/RenderManager.java	2022-01-19 17:34:54.607830600 -0500
+@@ -24,7 +24,7 @@
+ import net.minecraft.game.entity.monster.EntityZombie;
+ import net.minecraft.game.entity.player.EntityPlayer;
+ import net.minecraft.game.entity.projectile.EntityArrow;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import org.lwjgl.opengl.GL11;
+ import util.MathHelper;
+ 
+@@ -32,7 +32,7 @@
+ 	private Map entityRenderMap = new HashMap();
+ 	public static RenderManager instance = new RenderManager();
+ 	public RenderEngine renderEngine;
+-	public ChunkProviderGenerate worldObj;
++	public World worldObj;
+ 	public float playerViewY;
+ 	private double viewerPosX;
+ 	private double viewerPosY;
+@@ -72,7 +72,7 @@
+ 		return var3;
+ 	}
+ 
+-	public final void a(ChunkProviderGenerate var1, RenderEngine var2, EntityPlayer var3, float var4) {
++	public final void a(World var1, RenderEngine var2, EntityPlayer var3, float var4) {
+ 		this.worldObj = var1;
+ 		this.renderEngine = var2;
+ 		this.playerViewY = var3.prevRotationYaw + (var3.rotationYaw - var3.prevRotationYaw) * var4;
+@@ -100,7 +100,7 @@
+ 
+ 	}
+ 
+-	public final void a(ChunkProviderGenerate var1) {
++	public final void a(World var1) {
+ 		this.worldObj = var1;
+ 	}
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/EntityRenderer.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/EntityRenderer.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/EntityRenderer.java	2022-01-19 17:51:49.590394900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/EntityRenderer.java	2022-01-19 17:43:59.215292500 -0500
+@@ -14,7 +14,7 @@
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.physics.MovingObjectPosition;
+ import net.minecraft.game.physics.Vec3D;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.material.Material;
+ import org.lwjgl.BufferUtils;
+@@ -239,7 +239,7 @@
+ 		}
+ 
+ 		EntityPlayerSP var2 = this.mc.thePlayer;
+-		ChunkProviderGenerate var3 = this.mc.theWorld;
++		World var3 = this.mc.theWorld;
+ 		RenderGlobal var4 = this.mc.renderGlobal;
+ 		EffectRenderer var5 = this.mc.effectRenderer;
+ 		double var6 = var2.lastTickPosX + (var2.posX - var2.lastTickPosX) * (double)var1;
+@@ -256,7 +256,7 @@
+ 			}
+ 
+ 			GL11.glViewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
+-			ChunkProviderGenerate var54 = this.mc.theWorld;
++			World var54 = this.mc.theWorld;
+ 			EntityPlayerSP var57 = this.mc.thePlayer;
+ 			var17 = 1.0F / (float)(4 - this.mc.options.renderDistance);
+ 			var17 = 1.0F - (float)Math.pow((double)var17, 0.25D);
+@@ -344,10 +344,10 @@
+ 				double var39 = (double)(MathHelper.cos(var64.rotationYaw / 180.0F * 3.1415927F) * MathHelper.cos(var64.rotationPitch / 180.0F * 3.1415927F)) * 4.0D;
+ 				var41 = (double)(-MathHelper.sin(var64.rotationPitch / 180.0F * 3.1415927F)) * 4.0D;
+ 
+-				for(var52 = (float)false; var52 < 8; ++var52) {
+-					float var55 = (float)(((var52 & 1) << 1) - 1);
+-					float var50 = (float)(((var52 >> 1 & 1) << 1) - 1);
+-					var16 = (float)(((var52 >> 2 & 1) << 1) - 1);
++				for(var52 = (float)0.0f; var52 < 8; ++var52) {
++					float var55 = (float)((((int)var52 & 1) << 1) - 1);
++					float var50 = (float)((((int)var52 >> 1 & 1) << 1) - 1);
++					var16 = (float)((((int)var52 >> 2 & 1) << 1) - 1);
+ 					var55 *= 0.1F;
+ 					var50 *= 0.1F;
+ 					var16 *= 0.1F;
+@@ -486,7 +486,7 @@
+ 	}
+ 
+ 	private void disableColor() {
+-		ChunkProviderGenerate var1 = this.mc.theWorld;
++		World var1 = this.mc.theWorld;
+ 		EntityPlayerSP var2 = this.mc.thePlayer;
+ 		float var3 = 1.0F;
+ 		float var6 = this.fogColorBlue;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/RenderBlocks.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/RenderBlocks.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/RenderBlocks.java	2022-01-19 17:51:49.620394400 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/RenderBlocks.java	2022-01-19 17:34:54.582834500 -0500
+@@ -1,16 +1,16 @@
+ package net.minecraft.client.render;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.material.Material;
+ import org.lwjgl.opengl.GL11;
+ 
+ public final class RenderBlocks {
+-	private ChunkProviderGenerate posX;
++	private World posX;
+ 	private int posY = -1;
+ 	private boolean posZ = false;
+ 
+-	public RenderBlocks(ChunkProviderGenerate var1) {
++	public RenderBlocks(World var1) {
+ 		this.posX = var1;
+ 	}
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/RenderGlobal.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/RenderGlobal.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/RenderGlobal.java	2022-01-19 17:51:49.651429800 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/RenderGlobal.java	2022-01-19 17:34:54.595831300 -0500
+@@ -23,7 +23,7 @@
+ import net.minecraft.game.physics.MovingObjectPosition;
+ import net.minecraft.game.physics.Vec3D;
+ import net.minecraft.game.world.ChunkPosition;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.IWorldAccess;
+ import net.minecraft.game.world.block.Block;
+ import org.lwjgl.BufferUtils;
+@@ -33,7 +33,7 @@
+ import util.MathHelper;
+ 
+ public final class RenderGlobal implements IWorldAccess {
+-	private ChunkProviderGenerate worldObj;
++	private World worldObj;
+ 	private RenderEngine renderEngine;
+ 	private List glGenList = new ArrayList();
+ 	private WorldRenderer[] renderIntBuffer;
+@@ -128,7 +128,7 @@
+ 		GL11.glEndList();
+ 	}
+ 
+-	public final void a(ChunkProviderGenerate var1) {
++	public final void a(World var1) {
+ 		if(this.worldObj != null) {
+ 			this.worldObj.b((IWorldAccess)this);
+ 		}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/WorldRenderer.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/WorldRenderer.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/client/render/WorldRenderer.java	2022-01-19 17:51:49.667306500 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/client/render/WorldRenderer.java	2022-01-19 17:34:54.618828500 -0500
+@@ -3,13 +3,13 @@
+ import net.minecraft.client.render.camera.Frustrum;
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import org.lwjgl.opengl.GL11;
+ import util.MathHelper;
+ 
+ public final class WorldRenderer {
+-	private ChunkProviderGenerate posX;
++	private World posX;
+ 	private int posY = -1;
+ 	private static Tessellator posZ;
+ 	public static int chunksUpdated;
+@@ -37,7 +37,7 @@
+ 	public boolean glRenderList;
+ 	public int tessellator;
+ 
+-	public WorldRenderer(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5, int var6) {
++	public WorldRenderer(World var1, int var2, int var3, int var4, int var5, int var6) {
+ 		this.A = new RenderBlocks(var1);
+ 		this.posX = var1;
+ 		this.skipRenderPass = this.posXPlus = this.posYPlus = 16;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/animal/EntityAnimal.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/animal/EntityAnimal.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/animal/EntityAnimal.java	2022-01-19 17:51:48.668395400 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/animal/EntityAnimal.java	2022-01-19 17:36:02.580390500 -0500
+@@ -1,11 +1,12 @@
+ package net.minecraft.game.entity.animal;
+ 
+ import net.minecraft.game.entity.EntityCreature;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.block.Block;
+ 
+ public abstract class EntityAnimal extends EntityCreature {
+-	public EntityAnimal(ChunkProviderGenerate var1) {
++	public EntityAnimal(World var1) {
+ 		super(var1);
+ 	}
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/animal/EntityPig.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/animal/EntityPig.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/animal/EntityPig.java	2022-01-19 17:51:49.245397900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/animal/EntityPig.java	2022-01-19 17:36:13.722574200 -0500
+@@ -1,6 +1,7 @@
+ package net.minecraft.game.entity.animal;
+ 
+ import net.minecraft.game.item.Item;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.World;
+ 
+ public class EntityPig extends EntityAnimal {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/animal/EntitySheep.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/animal/EntitySheep.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/animal/EntitySheep.java	2022-01-19 17:51:49.247400600 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/animal/EntitySheep.java	2022-01-19 17:36:19.484932300 -0500
+@@ -3,6 +3,7 @@
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.entity.EntityLiving;
+ import net.minecraft.game.entity.misc.EntityItem;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/Entity.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/Entity.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/Entity.java	2022-01-19 17:51:48.641394300 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/Entity.java	2022-01-19 17:34:54.128829700 -0500
+@@ -5,14 +5,15 @@
+ import net.minecraft.game.entity.misc.EntityItem;
+ import net.minecraft.game.item.ItemStack;
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.block.StepSound;
+ import net.minecraft.game.world.material.Material;
+ import util.MathHelper;
+ 
+ public abstract class Entity {
+-	protected ChunkProviderGenerate worldObj;
++	protected World worldObj;
+ 	public double prevPosX;
+ 	public double prevPosY;
+ 	public double prevPosZ;
+@@ -57,7 +58,7 @@
+ 	private boolean firstUpdate = true;
+ 	public String skinUrl;
+ 
+-	public Entity(ChunkProviderGenerate var1) {
++	public Entity(World var1) {
+ 		this.worldObj = var1;
+ 		this.setPosition(0.0D, 0.0D, 0.0D);
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/EntityCreature.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/EntityCreature.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/EntityCreature.java	2022-01-19 17:51:48.647394700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/EntityCreature.java	2022-01-19 17:35:56.565505100 -0500
+@@ -1,7 +1,8 @@
+ package net.minecraft.game.entity;
+ 
+ import net.minecraft.game.physics.Vec3D;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.UnknownClass;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.path.PathEntity;
+ import util.MathHelper;
+ 
+@@ -10,7 +11,7 @@
+ 	protected Entity playerToAttack;
+ 	protected boolean hasAttacked = false;
+ 
+-	public EntityCreature(ChunkProviderGenerate var1) {
++	public EntityCreature(World var1) {
+ 		super(var1);
+ 	}
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/EntityLiving.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/EntityLiving.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/EntityLiving.java	2022-01-19 17:51:48.653394800 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/EntityLiving.java	2022-01-19 17:34:54.253830800 -0500
+@@ -1,6 +1,7 @@
+ package net.minecraft.game.entity;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.block.StepSound;
+ import util.MathHelper;
+@@ -34,7 +35,7 @@
+ 	private float defaultPitch;
+ 	protected float moveSpeed;
+ 
+-	public EntityLiving(ChunkProviderGenerate var1) {
++	public EntityLiving(World var1) {
+ 		super(var1);
+ 		Math.random();
+ 		this.entityAge = 0;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/EntityPainting.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/EntityPainting.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/EntityPainting.java	2022-01-19 17:51:48.660431100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/EntityPainting.java	2022-01-19 17:34:54.300832500 -0500
+@@ -6,7 +6,7 @@
+ import net.minecraft.game.item.Item;
+ import net.minecraft.game.item.ItemStack;
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public class EntityPainting extends Entity {
+@@ -17,7 +17,7 @@
+ 	private int zPosition;
+ 	public EnumArt art;
+ 
+-	private EntityPainting(ChunkProviderGenerate var1) {
++	private EntityPainting(World var1) {
+ 		super(var1);
+ 		this.tickCounter = 0;
+ 		this.direction = 0;
+@@ -25,7 +25,7 @@
+ 		this.setSize(0.5F, 0.5F);
+ 	}
+ 
+-	public EntityPainting(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public EntityPainting(World var1, int var2, int var3, int var4, int var5) {
+ 		this(var1);
+ 		this.xPosition = var2;
+ 		this.yPosition = var3;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/misc/EntityItem.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/misc/EntityItem.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/misc/EntityItem.java	2022-01-19 17:51:48.680397100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/misc/EntityItem.java	2022-01-19 17:34:54.220831200 -0500
+@@ -2,7 +2,7 @@
+ 
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.item.ItemStack;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.material.Material;
+ 
+@@ -14,7 +14,7 @@
+ 	private int health = 5;
+ 	public float hoverStart = (float)(Math.random() * 3.141592653589793D * 2.0D);
+ 
+-	public EntityItem(ChunkProviderGenerate var1, double var2, double var4, double var6, ItemStack var8) {
++	public EntityItem(World var1, double var2, double var4, double var6, ItemStack var8) {
+ 		super(var1);
+ 		this.setSize(0.25F, 0.25F);
+ 		this.yOffset = this.height / 2.0F;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/misc/EntityTNTPrimed.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/misc/EntityTNTPrimed.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/misc/EntityTNTPrimed.java	2022-01-19 17:51:48.686395400 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/misc/EntityTNTPrimed.java	2022-01-19 17:34:54.433837800 -0500
+@@ -1,13 +1,13 @@
+ package net.minecraft.game.entity.misc;
+ 
+ import net.minecraft.game.entity.Entity;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import util.MathHelper;
+ 
+ public class EntityTNTPrimed extends Entity {
+ 	public int fuse = 0;
+ 
+-	public EntityTNTPrimed(ChunkProviderGenerate var1, float var2, float var3, float var4) {
++	public EntityTNTPrimed(World var1, float var2, float var3, float var4) {
+ 		super(var1);
+ 		this.setSize(0.98F, 0.98F);
+ 		this.yOffset = this.height / 2.0F;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityCreeper.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityCreeper.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityCreeper.java	2022-01-19 17:51:49.250398600 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityCreeper.java	2022-01-19 17:35:45.443359700 -0500
+@@ -2,6 +2,7 @@
+ 
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.item.Item;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.World;
+ 
+ public class EntityCreeper extends EntityMob {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityGiantZombie.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityGiantZombie.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityGiantZombie.java	2022-01-19 17:51:49.252398100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityGiantZombie.java	2022-01-19 17:35:33.046452400 -0500
+@@ -1,5 +1,6 @@
+ package net.minecraft.game.entity.monster;
+ 
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.World;
+ 
+ public class EntityGiantZombie extends EntityMob {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityMob.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityMob.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityMob.java	2022-01-19 17:51:48.704395900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityMob.java	2022-01-19 17:34:54.285827700 -0500
+@@ -2,12 +2,12 @@
+ 
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.entity.EntityCreature;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public class EntityMob extends EntityCreature {
+ 	protected int attackStrength = 2;
+ 
+-	public EntityMob(ChunkProviderGenerate var1) {
++	public EntityMob(World var1) {
+ 		super(var1);
+ 		this.health = 20;
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntitySkeleton.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntitySkeleton.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntitySkeleton.java	2022-01-19 17:51:49.254399400 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntitySkeleton.java	2022-01-19 17:35:26.915589000 -0500
+@@ -3,6 +3,7 @@
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.entity.projectile.EntityArrow;
+ import net.minecraft.game.item.Item;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.World;
+ import util.MathHelper;
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntitySpider.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntitySpider.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntitySpider.java	2022-01-19 17:51:49.260393300 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntitySpider.java	2022-01-19 17:35:40.313703400 -0500
+@@ -2,6 +2,7 @@
+ 
+ import net.minecraft.game.entity.Entity;
+ import net.minecraft.game.item.Item;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.World;
+ import util.MathHelper;
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityZombie.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityZombie.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/monster/EntityZombie.java	2022-01-19 17:51:49.274397000 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/monster/EntityZombie.java	2022-01-19 17:35:20.946064800 -0500
+@@ -1,6 +1,7 @@
+ package net.minecraft.game.entity.monster;
+ 
+ import net.minecraft.game.item.Item;
++import net.minecraft.game.world.UnknownClass;
+ import net.minecraft.game.world.World;
+ 
+ public class EntityZombie extends EntityMob {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/player/EntityPlayer.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/player/EntityPlayer.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/player/EntityPlayer.java	2022-01-19 17:51:48.726397800 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/player/EntityPlayer.java	2022-01-19 17:34:54.308829700 -0500
+@@ -9,7 +9,7 @@
+ import net.minecraft.game.item.Item;
+ import net.minecraft.game.item.ItemArmor;
+ import net.minecraft.game.item.ItemStack;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.block.tileentity.TileEntityFurnace;
+ import net.minecraft.game.world.material.Material;
+@@ -24,7 +24,7 @@
+ 	protected String username;
+ 	private int damageRemainder = 0;
+ 
+-	public EntityPlayer(ChunkProviderGenerate var1) {
++	public EntityPlayer(World var1) {
+ 		super(var1);
+ 		if(var1 != null) {
+ 			var1.noiseGen1 = this;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/projectile/EntityArrow.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/projectile/EntityArrow.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/entity/projectile/EntityArrow.java	2022-01-19 17:51:48.736397400 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/entity/projectile/EntityArrow.java	2022-01-19 17:34:54.159827900 -0500
+@@ -5,7 +5,7 @@
+ import net.minecraft.game.entity.EntityLiving;
+ import net.minecraft.game.physics.MovingObjectPosition;
+ import net.minecraft.game.physics.Vec3D;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import util.MathHelper;
+ 
+ public class EntityArrow extends Entity {
+@@ -19,7 +19,7 @@
+ 	private int ticksInGround;
+ 	private int ticksInAir = 0;
+ 
+-	public EntityArrow(ChunkProviderGenerate var1, EntityLiving var2) {
++	public EntityArrow(World var1, EntityLiving var2) {
+ 		super(var1);
+ 		this.shootingEntity = var2;
+ 		this.setSize(0.5F, 0.5F);
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/Item.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/Item.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/Item.java	2022-01-19 17:51:49.289397300 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/Item.java	2022-01-19 17:34:54.496833000 -0500
+@@ -2,7 +2,7 @@
+ 
+ import java.util.Random;
+ import net.minecraft.game.entity.player.EntityPlayer;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ 
+ public class Item {
+@@ -77,7 +77,7 @@
+ 	public final int shiftedIndex;
+ 	protected int maxStackSize = 64;
+ 	protected int maxDamage = 32;
+-	private int iconIndex;
++	protected int iconIndex;
+ 
+ 	protected Item(int var1) {
+ 		this.shiftedIndex = var1 + 256;
+@@ -97,7 +97,7 @@
+ 		return this.iconIndex;
+ 	}
+ 
+-	public boolean a(ItemStack var1, ChunkProviderGenerate var2, int var3, int var4, int var5, int var6) {
++	public boolean a(ItemStack var1, World var2, int var3, int var4, int var5, int var6) {
+ 		return false;
+ 	}
+ 
+@@ -105,7 +105,7 @@
+ 		return 1.0F;
+ 	}
+ 
+-	public ItemStack a(ItemStack var1, ChunkProviderGenerate var2, EntityPlayer var3) {
++	public ItemStack a(ItemStack var1, World var2, EntityPlayer var3) {
+ 		return var1;
+ 	}
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemBlock.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemBlock.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemBlock.java	2022-01-19 17:51:48.763394500 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemBlock.java	2022-01-19 17:34:54.504828600 -0500
+@@ -1,6 +1,6 @@
+ package net.minecraft.game.item;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.block.StepSound;
+ 
+@@ -13,7 +13,7 @@
+ 		this.setIconIndex(Block.blocksList[var1 + 256].getBlockTextureFromSide(2));
+ 	}
+ 
+-	public final boolean a(ItemStack var1, ChunkProviderGenerate var2, int var3, int var4, int var5, int var6) {
++	public final boolean a(ItemStack var1, World var2, int var3, int var4, int var5, int var6) {
+ 		if(var6 == 0) {
+ 			--var4;
+ 		}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemBow.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemBow.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemBow.java	2022-01-19 17:51:48.765395200 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemBow.java	2022-01-19 17:34:54.509831500 -0500
+@@ -2,7 +2,7 @@
+ 
+ import net.minecraft.game.entity.player.EntityPlayer;
+ import net.minecraft.game.entity.projectile.EntityArrow;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class ItemBow extends Item {
+ 	public ItemBow(int var1) {
+@@ -10,7 +10,7 @@
+ 		this.maxStackSize = 1;
+ 	}
+ 
+-	public final ItemStack a(ItemStack var1, ChunkProviderGenerate var2, EntityPlayer var3) {
++	public final ItemStack a(ItemStack var1, World var2, EntityPlayer var3) {
+ 		if(var3.inventory.consumeInventoryItem(Item.arrow.shiftedIndex)) {
+ 			var2.a(var3, "random.bow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+ 			new EntityArrow(var2, var3);
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemFlintAndSteel.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemFlintAndSteel.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemFlintAndSteel.java	2022-01-19 17:51:48.772394800 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemFlintAndSteel.java	2022-01-19 17:34:54.516833900 -0500
+@@ -1,6 +1,6 @@
+ package net.minecraft.game.item;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ 
+ public final class ItemFlintAndSteel extends Item {
+@@ -10,7 +10,7 @@
+ 		this.maxDamage = 64;
+ 	}
+ 
+-	public final boolean a(ItemStack var1, ChunkProviderGenerate var2, int var3, int var4, int var5, int var6) {
++	public final boolean a(ItemStack var1, World var2, int var3, int var4, int var5, int var6) {
+ 		if(var6 == 0) {
+ 			--var4;
+ 		}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemFood.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemFood.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemFood.java	2022-01-19 17:51:48.778394500 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemFood.java	2022-01-19 17:34:54.521830600 -0500
+@@ -1,7 +1,7 @@
+ package net.minecraft.game.item;
+ 
+ import net.minecraft.game.entity.player.EntityPlayer;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public class ItemFood extends Item {
+ 	private int healAmount;
+@@ -12,7 +12,7 @@
+ 		this.maxStackSize = 1;
+ 	}
+ 
+-	public ItemStack a(ItemStack var1, ChunkProviderGenerate var2, EntityPlayer var3) {
++	public ItemStack a(ItemStack var1, World var2, EntityPlayer var3) {
+ 		--var1.stackSize;
+ 		var3.heal(this.healAmount);
+ 		return var1;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemHoe.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemHoe.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemHoe.java	2022-01-19 17:51:48.780394700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemHoe.java	2022-01-19 17:34:54.527832400 -0500
+@@ -1,7 +1,7 @@
+ package net.minecraft.game.item;
+ 
+ import net.minecraft.game.entity.misc.EntityItem;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ import net.minecraft.game.world.block.StepSound;
+ 
+@@ -12,7 +12,7 @@
+ 		this.maxDamage = 32 << var2;
+ 	}
+ 
+-	public final boolean a(ItemStack var1, ChunkProviderGenerate var2, int var3, int var4, int var5, int var6) {
++	public final boolean a(ItemStack var1, World var2, int var3, int var4, int var5, int var6) {
+ 		var6 = var2.getBlockAt(var3, var4, var5);
+ 		if((var2.b(var3, var4 + 1, var5).isSolid() || var6 != Block.dirt.minX) && var6 != Block.cobblestone.minX) {
+ 			return false;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemPainting.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemPainting.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemPainting.java	2022-01-19 17:51:48.787394100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemPainting.java	2022-01-19 17:34:54.532829000 -0500
+@@ -1,7 +1,7 @@
+ package net.minecraft.game.item;
+ 
+ import net.minecraft.game.entity.EntityPainting;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class ItemPainting extends Item {
+ 	public ItemPainting(int var1) {
+@@ -9,7 +9,7 @@
+ 		this.maxDamage = 64;
+ 	}
+ 
+-	public final boolean a(ItemStack var1, ChunkProviderGenerate var2, int var3, int var4, int var5, int var6) {
++	public final boolean a(ItemStack var1, World var2, int var3, int var4, int var5, int var6) {
+ 		if(var6 == 0) {
+ 			return false;
+ 		} else if(var6 == 1) {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemSeeds.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemSeeds.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemSeeds.java	2022-01-19 17:51:48.796401000 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemSeeds.java	2022-01-19 17:34:54.537827700 -0500
+@@ -1,6 +1,6 @@
+ package net.minecraft.game.item;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.Block;
+ 
+ public final class ItemSeeds extends Item {
+@@ -11,7 +11,7 @@
+ 		this.blockType = var2;
+ 	}
+ 
+-	public final boolean a(ItemStack var1, ChunkProviderGenerate var2, int var3, int var4, int var5, int var6) {
++	public final boolean a(ItemStack var1, World var2, int var3, int var4, int var5, int var6) {
+ 		if(var6 != 1) {
+ 			return false;
+ 		} else if(var2.getBlockAt(var3, var4, var5) == Block.stoneOvenIdle.minX) {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemSoup.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemSoup.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/item/ItemSoup.java	2022-01-19 17:51:48.802395200 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/item/ItemSoup.java	2022-01-19 17:34:54.543829000 -0500
+@@ -1,14 +1,14 @@
+ package net.minecraft.game.item;
+ 
+ import net.minecraft.game.entity.player.EntityPlayer;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class ItemSoup extends ItemFood {
+ 	public ItemSoup(int var1, int var2) {
+ 		super(26, 10);
+ 	}
+ 
+-	public final ItemStack a(ItemStack var1, ChunkProviderGenerate var2, EntityPlayer var3) {
++	public final ItemStack a(ItemStack var1, World var2, EntityPlayer var3) {
+ 		super.a(var1, var2, var3);
+ 		return new ItemStack(Item.bowlEmpty);
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/Block.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/Block.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/Block.java	2022-01-19 17:51:48.898394600 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/Block.java	2022-01-19 17:34:53.975826500 -0500
+@@ -10,7 +10,7 @@
+ import net.minecraft.game.physics.AxisAlignedBB;
+ import net.minecraft.game.physics.MovingObjectPosition;
+ import net.minecraft.game.physics.Vec3D;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public class Block {
+@@ -170,15 +170,15 @@
+ 		this.stepSound = (double)var6;
+ 	}
+ 
+-	public float b(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public float b(World var1, int var2, int var3, int var4) {
+ 		return var1.e(var2, var3, var4);
+ 	}
+ 
+-	public boolean c(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public boolean c(World var1, int var2, int var3, int var4, int var5) {
+ 		return !var1.f(var2, var3, var4);
+ 	}
+ 
+-	public int a(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public int a(World var1, int var2, int var3, int var4, int var5) {
+ 		return this.getBlockTextureFromSideAndMetadata(var5, var1.c(var2, var3, var4));
+ 	}
+ 
+@@ -206,7 +206,7 @@
+ 		return true;
+ 	}
+ 
+-	public void b(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public void b(World var1, int var2, int var3, int var4, int var5) {
+ 	}
+ 
+ 	public int quantityDropped(Random var1) {
+@@ -242,13 +242,13 @@
+ 		}
+ 	}
+ 
+-	public final void d(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final void d(World var1, int var2, int var3, int var4, int var5) {
+ 		float var13 = 1.0F;
+ 		int var6 = var5;
+ 		var5 = var4;
+ 		var4 = var3;
+ 		var3 = var2;
+-		ChunkProviderGenerate var15 = var1;
++		World var15 = var1;
+ 		Block var14 = this;
+ 		int var7 = this.quantityDropped(var1.noiseGen4);
+ 
+@@ -264,7 +264,7 @@
+ 
+ 	}
+ 
+-	public MovingObjectPosition a(ChunkProviderGenerate var1, int var2, int var3, int var4, Vec3D var5, Vec3D var6) {
++	public MovingObjectPosition a(World var1, int var2, int var3, int var4, Vec3D var5, Vec3D var6) {
+ 		var5 = var5.addVector((double)(-var2), (double)(-var3), (double)(-var4));
+ 		var6 = var6.addVector((double)(-var2), (double)(-var3), (double)(-var4));
+ 		Vec3D var12 = var5.getIntermediateWithXValue(var6, this.minY);
+@@ -370,18 +370,18 @@
+ 		return 0;
+ 	}
+ 
+-	public boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public boolean a(World var1, int var2, int var3, int var4) {
+ 		return true;
+ 	}
+ 
+-	public boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4, EntityPlayer var5) {
++	public boolean a(World var1, int var2, int var3, int var4, EntityPlayer var5) {
+ 		return false;
+ 	}
+ 
+-	public void c(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public void c(World var1, int var2, int var3, int var4) {
+ 	}
+ 
+-	public void e(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public void e(World var1, int var2, int var3, int var4, int var5) {
+ 	}
+ 
+ 	static {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockBreakable.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockBreakable.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockBreakable.java	2022-01-19 17:51:48.910395200 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockBreakable.java	2022-01-19 17:34:53.980826700 -0500
+@@ -1,6 +1,6 @@
+ package net.minecraft.game.world.block;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public class BlockBreakable extends Block {
+@@ -15,7 +15,7 @@
+ 		return false;
+ 	}
+ 
+-	public final boolean c(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final boolean c(World var1, int var2, int var3, int var4, int var5) {
+ 		int var6 = var1.getBlockAt(var2, var3, var4);
+ 		return !this.localFlag && var6 == this.minX ? false : super.c(var1, var2, var3, var4, var5);
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockChest.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockChest.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockChest.java	2022-01-19 17:51:48.912395700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockChest.java	2022-01-19 17:34:53.986827000 -0500
+@@ -4,7 +4,7 @@
+ import net.minecraft.game.IInventory;
+ import net.minecraft.game.InventoryLargeChest;
+ import net.minecraft.game.entity.player.EntityPlayer;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockChest extends BlockContainer {
+@@ -14,7 +14,7 @@
+ 		this.blockID = 26;
+ 	}
+ 
+-	public final int a(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final int a(World var1, int var2, int var3, int var4, int var5) {
+ 		if(var5 == 1) {
+ 			return this.blockID - 1;
+ 		} else if(var5 == 0) {
+@@ -105,7 +105,7 @@
+ 		return var1 == 1 ? this.blockID - 1 : (var1 == 0 ? this.blockID - 1 : (var1 == 3 ? this.blockID + 1 : this.blockID));
+ 	}
+ 
+-	public final boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public final boolean a(World var1, int var2, int var3, int var4) {
+ 		int var5 = 0;
+ 		if(var1.getBlockAt(var2 - 1, var3, var4) == this.minX) {
+ 			++var5;
+@@ -126,11 +126,11 @@
+ 		return var5 > 1 ? false : (this.d(var1, var2 - 1, var3, var4) ? false : (this.d(var1, var2 + 1, var3, var4) ? false : (this.d(var1, var2, var3, var4 - 1) ? false : !this.d(var1, var2, var3, var4 + 1))));
+ 	}
+ 
+-	private boolean d(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	private boolean d(World var1, int var2, int var3, int var4) {
+ 		return var1.getBlockAt(var2, var3, var4) != this.minX ? false : (var1.getBlockAt(var2 - 1, var3, var4) == this.minX ? true : (var1.getBlockAt(var2 + 1, var3, var4) == this.minX ? true : (var1.getBlockAt(var2, var3, var4 - 1) == this.minX ? true : var1.getBlockAt(var2, var3, var4 + 1) == this.minX)));
+ 	}
+ 
+-	public final boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4, EntityPlayer var5) {
++	public final boolean a(World var1, int var2, int var3, int var4, EntityPlayer var5) {
+ 		InventoryLargeChest var6 = null;
+ 		if(var1.f(var2, var3 + 1, var4)) {
+ 			return true;
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockCrops.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockCrops.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockCrops.java	2022-01-19 17:51:48.915396900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockCrops.java	2022-01-19 17:34:53.991827700 -0500
+@@ -4,7 +4,7 @@
+ import net.minecraft.game.entity.misc.EntityItem;
+ import net.minecraft.game.item.Item;
+ import net.minecraft.game.item.ItemStack;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ 
+ public final class BlockCrops extends BlockFlower {
+ 	protected BlockCrops(int var1, int var2) {
+@@ -30,7 +30,7 @@
+ 		return 6;
+ 	}
+ 
+-	public final void b(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final void b(World var1, int var2, int var3, int var4, int var5) {
+ 		super.b(var1, var2, var3, var4, var5);
+ 
+ 		for(int var6 = 0; var6 < 3; ++var6) {
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFarmland.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFarmland.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFarmland.java	2022-01-19 17:51:48.927394700 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFarmland.java	2022-01-19 17:34:53.995826700 -0500
+@@ -2,7 +2,7 @@
+ 
+ import java.util.Random;
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockFarmland extends Block {
+@@ -30,7 +30,7 @@
+ 		return var1 == 1 && var2 > 0 ? this.blockID - 1 : (var1 == 1 ? this.blockID : 2);
+ 	}
+ 
+-	public final void c(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public final void c(World var1, int var2, int var3, int var4) {
+ 		if(var1.noiseGen4.nextInt(4) == 0) {
+ 			var1.b(var2, var3, var4, Block.cobblestone.minX);
+ 		}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFire.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFire.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFire.java	2022-01-19 17:51:48.934395300 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFire.java	2022-01-19 17:34:53.999837400 -0500
+@@ -2,7 +2,7 @@
+ 
+ import java.util.Random;
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockFire extends Block {
+@@ -53,11 +53,11 @@
+ 		return false;
+ 	}
+ 
+-	public final boolean d(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public final boolean d(World var1, int var2, int var3, int var4) {
+ 		return this.chanceToEncourageFire[var1.getBlockAt(var2, var3, var4)] > 0;
+ 	}
+ 
+-	public final boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public final boolean a(World var1, int var2, int var3, int var4) {
+ 		return var1.f(var2, var3 - 1, var4) || (this.d(var1, var2 + 1, var3, var4) ? true : (this.d(var1, var2 - 1, var3, var4) ? true : (this.d(var1, var2, var3 - 1, var4) ? true : (this.d(var1, var2, var3 + 1, var4) ? true : (this.d(var1, var2, var3, var4 - 1) ? true : this.d(var1, var2, var3, var4 + 1))))));
+ 	}
+ }
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFlower.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFlower.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFlower.java	2022-01-19 17:51:48.941397300 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFlower.java	2022-01-19 17:34:54.005845800 -0500
+@@ -1,7 +1,7 @@
+ package net.minecraft.game.world.block;
+ 
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public class BlockFlower extends Block {
+@@ -12,7 +12,7 @@
+ 		this.setBlockBounds(0.3F, 0.0F, 0.3F, 0.7F, 0.6F, 0.7F);
+ 	}
+ 
+-	public final boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public final boolean a(World var1, int var2, int var3, int var4) {
+ 		return this.canThisPlantGrowOnThisBlockID(var1.getBlockAt(var2, var3 - 1, var4));
+ 	}
+ 
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFlowing.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFlowing.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFlowing.java	2022-01-19 17:51:48.947396200 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFlowing.java	2022-01-19 17:34:54.012832600 -0500
+@@ -2,7 +2,7 @@
+ 
+ import java.util.Random;
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockFlowing extends BlockFluid {
+@@ -25,7 +25,7 @@
+ 		this.setTickOnLoad(true);
+ 	}
+ 
+-	public final boolean c(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final boolean c(World var1, int var2, int var3, int var4, int var5) {
+ 		int var6;
+ 		return (var6 = var1.getBlockAt(var2, var3, var4)) != this.aA && var6 != this.movingId1 ? (var5 != 1 || var1.getBlockAt(var2 - 1, var3, var4) != 0 && var1.getBlockAt(var2 + 1, var3, var4) != 0 && var1.getBlockAt(var2, var3, var4 - 1) != 0 && var1.getBlockAt(var2, var3, var4 + 1) != 0 ? super.c(var1, var2, var3, var4, var5) : true) : false;
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFluid.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFluid.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFluid.java	2022-01-19 17:51:48.953395600 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFluid.java	2022-01-19 17:34:54.017828000 -0500
+@@ -2,7 +2,7 @@
+ 
+ import java.util.Random;
+ import net.minecraft.game.physics.AxisAlignedBB;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public class BlockFluid extends Block {
+@@ -32,11 +32,11 @@
+ 		return false;
+ 	}
+ 
+-	public final float b(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public final float b(World var1, int var2, int var3, int var4) {
+ 		return this.soundGravelFootstep == Material.lava ? 100.0F : super.b(var1, var2, var3, var4);
+ 	}
+ 
+-	public boolean c(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public boolean c(World var1, int var2, int var3, int var4, int var5) {
+ 		int var6;
+ 		return (var6 = var1.getBlockAt(var2, var3, var4)) != this.movingId && var6 != this.stillId ? (var5 != 1 || var1.getBlockAt(var2 - 1, var3, var4) != 0 && var1.getBlockAt(var2 + 1, var3, var4) != 0 && var1.getBlockAt(var2, var3, var4 - 1) != 0 && var1.getBlockAt(var2, var3, var4 + 1) != 0 ? super.c(var1, var2, var3, var4, var5) : true) : false;
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFurnace.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFurnace.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockFurnace.java	2022-01-19 17:51:48.955398600 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockFurnace.java	2022-01-19 17:34:54.022836600 -0500
+@@ -1,7 +1,7 @@
+ package net.minecraft.game.world.block;
+ 
+ import net.minecraft.game.entity.player.EntityPlayer;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.block.tileentity.TileEntityFurnace;
+ import net.minecraft.game.world.material.Material;
+ 
+@@ -14,7 +14,7 @@
+ 		this.blockID = 45;
+ 	}
+ 
+-	public final int a(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final int a(World var1, int var2, int var3, int var4, int var5) {
+ 		if(var5 == 1) {
+ 			return Block.grass.blockID;
+ 		} else if(var5 == 0) {
+@@ -55,7 +55,7 @@
+ 		return var1 == 1 ? Block.grass.minX : (var1 == 0 ? Block.grass.minX : (var1 == 3 ? this.blockID - 1 : this.blockID));
+ 	}
+ 
+-	public final boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4, EntityPlayer var5) {
++	public final boolean a(World var1, int var2, int var3, int var4, EntityPlayer var5) {
+ 		var5.displayGUIFurnace((TileEntityFurnace)null);
+ 		return true;
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockLeavesBase.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockLeavesBase.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockLeavesBase.java	2022-01-19 17:51:48.969398200 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockLeavesBase.java	2022-01-19 17:34:54.027837900 -0500
+@@ -1,6 +1,6 @@
+ package net.minecraft.game.world.block;
+ 
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public class BlockLeavesBase extends Block {
+@@ -14,7 +14,7 @@
+ 		return false;
+ 	}
+ 
+-	public final boolean c(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final boolean c(World var1, int var2, int var3, int var4, int var5) {
+ 		int var6 = var1.getBlockAt(var2, var3, var4);
+ 		return !this.graphicsLevel && var6 == this.minX ? false : super.c(var1, var2, var3, var4, var5);
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockStep.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockStep.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockStep.java	2022-01-19 17:51:49.019410900 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockStep.java	2022-01-19 17:34:54.032828900 -0500
+@@ -1,7 +1,7 @@
+ package net.minecraft.game.world.block;
+ 
+ import java.util.Random;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockStep extends Block {
+@@ -33,7 +33,7 @@
+ 		return this.blockType;
+ 	}
+ 
+-	public final boolean c(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final boolean c(World var1, int var2, int var3, int var4, int var5) {
+ 		if(this != Block.brick) {
+ 			super.c(var1, var2, var3, var4, var5);
+ 		}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockTNT.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockTNT.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockTNT.java	2022-01-19 17:51:49.035394800 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockTNT.java	2022-01-19 17:34:54.036829100 -0500
+@@ -2,7 +2,7 @@
+ 
+ import java.util.Random;
+ import net.minecraft.game.entity.misc.EntityTNTPrimed;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockTNT extends Block {
+@@ -18,7 +18,7 @@
+ 		return 0;
+ 	}
+ 
+-	public final void b(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final void b(World var1, int var2, int var3, int var4, int var5) {
+ 		EntityTNTPrimed var6 = new EntityTNTPrimed(var1, (float)var2 + 0.5F, (float)var3 + 0.5F, (float)var4 + 0.5F);
+ 		var1.a(var6, "random.fuse", 1.0F, 1.0F);
+ 	}
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockTorch.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockTorch.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockTorch.java	2022-01-19 17:51:49.038403200 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockTorch.java	2022-01-19 17:34:54.042832900 -0500
+@@ -3,7 +3,7 @@
+ import net.minecraft.game.physics.AxisAlignedBB;
+ import net.minecraft.game.physics.MovingObjectPosition;
+ import net.minecraft.game.physics.Vec3D;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockTorch extends Block {
+@@ -28,11 +28,11 @@
+ 		return 2;
+ 	}
+ 
+-	public final boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4) {
++	public final boolean a(World var1, int var2, int var3, int var4) {
+ 		return var1.f(var2 - 1, var3, var4) ? true : (var1.f(var2 + 1, var3, var4) ? true : (var1.f(var2, var3, var4 - 1) ? true : (var1.f(var2, var3, var4 + 1) ? true : var1.f(var2, var3 - 1, var4))));
+ 	}
+ 
+-	public final void e(ChunkProviderGenerate var1, int var2, int var3, int var4, int var5) {
++	public final void e(World var1, int var2, int var3, int var4, int var5) {
+ 		int var6 = var1.c(var2, var3, var4);
+ 		if(var5 == 1 && var1.f(var2, var3 - 1, var4)) {
+ 			var6 = 5;
+@@ -57,7 +57,7 @@
+ 		var1.a(var2, var3, var4, var6);
+ 	}
+ 
+-	public final MovingObjectPosition a(ChunkProviderGenerate var1, int var2, int var3, int var4, Vec3D var5, Vec3D var6) {
++	public final MovingObjectPosition a(World var1, int var2, int var3, int var4, Vec3D var5, Vec3D var6) {
+ 		int var7;
+ 		if((var7 = var1.c(var2, var3, var4)) == 1) {
+ 			this.setBlockBounds(0.0F, 0.2F, 0.35F, 0.3F, 0.8F, 0.65F);
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockWorkbench.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockWorkbench.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/block/BlockWorkbench.java	2022-01-19 17:51:49.048401100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/block/BlockWorkbench.java	2022-01-19 17:34:54.047828800 -0500
+@@ -1,7 +1,7 @@
+ package net.minecraft.game.world.block;
+ 
+ import net.minecraft.game.entity.player.EntityPlayer;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class BlockWorkbench extends Block {
+@@ -14,7 +14,7 @@
+ 		return var1 == 1 ? this.blockID - 16 : (var1 == 0 ? Block.sapling.getBlockTextureFromSide(0) : (var1 != 2 && var1 != 4 ? this.blockID : this.blockID + 1));
+ 	}
+ 
+-	public final boolean a(ChunkProviderGenerate var1, int var2, int var3, int var4, EntityPlayer var5) {
++	public final boolean a(World var1, int var2, int var3, int var4, EntityPlayer var5) {
+ 		var5.displayWorkbenchGUI();
+ 		return true;
+ 	}
+Only in C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world: ChunkProviderGenerate.java
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/path/Pathfinder.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/path/Pathfinder.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/path/Pathfinder.java	2022-01-19 17:51:49.293395600 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/path/Pathfinder.java	2022-01-19 17:34:54.558828500 -0500
+@@ -3,16 +3,16 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ import net.minecraft.game.entity.Entity;
+-import net.minecraft.game.world.ChunkProviderGenerate;
++import net.minecraft.game.world.World;
+ import net.minecraft.game.world.material.Material;
+ 
+ public final class Pathfinder {
+-	private ChunkProviderGenerate worldMap;
++	private World worldMap;
+ 	private Path path = new Path();
+ 	private Map pointMap = new HashMap();
+ 	private PathPoint[] pathOptions = new PathPoint[32];
+ 
+-	public Pathfinder(ChunkProviderGenerate var1) {
++	public Pathfinder(World var1) {
+ 		this.worldMap = var1;
+ 	}
+ 
+Only in C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world: UnknownClass.java
+diff -r -U 3 C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/World.java C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/World.java
+--- C:\Users\micha\RetroMCP\src/minecraft/net/minecraft/game/world/World.java	2022-01-19 17:51:48.892397100 -0500
++++ C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft/game/world/World.java	2022-01-19 17:45:52.880354800 -0500
+@@ -1,21 +1,737 @@
+ package net.minecraft.game.world;
+ 
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Random;
++
++import net.minecraft.game.entity.Entity;
++import net.minecraft.game.physics.AxisAlignedBB;
++import net.minecraft.game.physics.MovingObjectPosition;
++import net.minecraft.game.physics.Vec3D;
++import net.minecraft.game.world.block.Block;
++import net.minecraft.game.world.material.Material;
++import net.minecraft.game.world.path.Pathfinder;
++import net.minecraft.unknown.a;
++import net.minecraft.unknown.b;
++import net.minecraft.unknown.d;
++import net.minecraft.unknown.SomeChunkGenerator;
++import util.MathHelper;
++
+ public final class World {
+-	public final EntityMapSlot entityMap;
+-	public final int playerEntity;
+-	public final int difficultySetting;
+-	public final int pathFinder;
+-	public final int rand;
+-	public final int spawnX;
+-	public final int spawnY;
+-
+-	public World(EntityMapSlot var1, int var2, int var3, int var4, int var5, int var6, int var7) {
+-		this.entityMap = var1;
+-		this.playerEntity = var2;
+-		this.difficultySetting = var3;
+-		this.pathFinder = var4;
+-		this.rand = var5;
+-		this.spawnX = var6;
+-		this.spawnY = var7;
++	private List i = new ArrayList();
++	private int j = 0;
++	private long k = 10079487L;
++	private long l = 11587839L;
++	private long m = 16777215L;
++	private int n = 0;
++	private static float[] o = new float[16];
++	public ChunkPosition rand = new ChunkPosition(256, 256, 256);
++	public Entity noiseGen1;
++	public int noiseGen2;
++	public final Pathfinder noiseGen3 = new Pathfinder(this);
++	public Random noiseGen4 = new Random();
++	public float noiseGen5 = 0.0F;
++	public float noiseGen6 = 64.0F;
++	public float chunks = 0.0F;
++	private List p = new ArrayList();
++	private a q = new b(new SomeChunkGenerator(this));
++
++	public final int getBlockAt(int var1, int var2, int var3) {
++		return var1 >= -32000000 && var3 >= -32000000 && var1 < 32000000 && var3 <= 32000000 ? (var2 <= 0 ? Block.sand.minX : (var2 >= 128 ? 0 : this.d(var1 >>> 4, var3 >>> 4).a(var1 & 15, var2, var3 & 15))) : 0;
++	}
++
++	public final boolean a(int var1, int var2) {
++		return this.c(var1 >>> 4, var2 >>> 4);
++	}
++
++	private boolean c(int var1, int var2) {
++		return this.q.a(var1, var2);
++	}
++
++	private d d(int var1, int var2) {
++		return this.q.b(var1, var2);
++	}
++
++	public final Material b(int var1, int var2, int var3) {
++		return (var1 = this.getBlockAt(var1, var2, var3)) == 0 ? Material.air : Block.blocksList[var1].soundGravelFootstep;
++	}
++
++	public final int c(int var1, int var2, int var3) {
++		if(var1 >= -32000000 && var3 >= -32000000 && var1 < 32000000 && var3 <= 32000000) {
++			if(var2 < 0) {
++				return 0;
++			} else if(var2 >= 128) {
++				return 0;
++			} else {
++				d var4 = this.d(var1 >>> 4, var3 >>> 4);
++				var1 &= 15;
++				var3 &= 15;
++				return var4.b(var1, var2, var3);
++			}
++		} else {
++			return 0;
++		}
++	}
++
++	public final void a(int var1, int var2, int var3, int var4) {
++		int var5 = var4;
++		var4 = var3;
++		var3 = var2;
++		var2 = var1;
++		boolean var10000;
++		if(var1 >= -32000000 && var4 >= -32000000 && var1 < 32000000 && var4 <= 32000000) {
++			if(var3 < 0) {
++				var10000 = false;
++			} else if(var3 >= 128) {
++				var10000 = false;
++			} else {
++				d var6 = this.d(var1 >>> 4, var4 >>> 4);
++				var2 &= 15;
++				var4 &= 15;
++				var6.b(var2, var3, var4, var5);
++				var10000 = true;
++			}
++		} else {
++			var10000 = false;
++		}
++
++	}
++
++	public final boolean b(int var1, int var2, int var3, int var4) {
++		boolean var10000;
++		int var6;
++		int var8;
++		if(var1 >= -32000000 && var3 >= -32000000 && var1 < 32000000 && var3 <= 32000000) {
++			if(var2 < 0) {
++				var10000 = false;
++			} else if(var2 >= 128) {
++				var10000 = false;
++			} else {
++				d var10 = this.d(var1 >>> 4, var3 >>> 4);
++				var6 = var1 & 15;
++				var8 = var3 & 15;
++				if((var10.a(var6, var2, var8) & 255) == var4) {
++					var10000 = false;
++				} else {
++					var10.a(var6, var2, var8, var4);
++					var10000 = true;
++				}
++			}
++		} else {
++			var10000 = false;
++		}
++
++		if(!var10000) {
++			return false;
++		} else {
++			var8 = var3;
++			int var7 = var2;
++			var6 = var1;
++			World var5 = this;
++
++			for(int var11 = 0; var11 < var5.p.size(); ++var11) {
++				((IWorldAccess)var5.p.get(var11)).markBlockAndNeighborsNeedsUpdate(var6, var7, var8);
++			}
++
++			return true;
++		}
++	}
++
++	public final void c(int var1, int var2, int var3, int var4) {
++		if(var3 > var4) {
++			int var5 = var4;
++			var4 = var3;
++			var3 = var5;
++		}
++
++		this.a(var1, var3, var2, var1, var4, var2);
++	}
++
++	public final void a(int var1, int var2, int var3, int var4, int var5, int var6) {
++		for(int var7 = 0; var7 < this.p.size(); ++var7) {
++			((IWorldAccess)this.p.get(var7)).markBlocksForUpdate(var1, var2, var3, var4, var5, var6);
++		}
++
++	}
++
++	public final int d(int var1, int var2, int var3) {
++		if(var1 >= -32000000 && var3 >= -32000000 && var1 < 32000000 && var3 <= 32000000) {
++			if(var2 < 0) {
++				return 15;
++			} else if(var2 >= 128) {
++				return 15;
++			} else {
++				d var4 = this.d(var1 >>> 4, var3 >>> 4);
++				var1 &= 15;
++				var3 &= 15;
++				return var4.c(var1, var2, var3, this.n);
++			}
++		} else {
++			return 15;
++		}
++	}
++
++	public final int b(int var1, int var2) {
++		return var1 >= -32000000 && var2 >= -32000000 && var1 < 32000000 && var2 <= 32000000 ? (!this.c(var1 >>> 4, var2 >>> 4) ? 0 : this.d(var1 >>> 4, var2 >>> 4).b(var1 & 15, var2 & 15)) : 0;
++	}
++
++	public final void a(EntityMapSlot var1, int var2, int var3, int var4, int var5) {
++		if(this.a(var2, var4) && this.a(var1, var2, var3, var4) != var5) {
++			this.a(var1, var2, var3, var4, var2, var3, var4);
++		}
++
++	}
++
++	public final int a(EntityMapSlot var1, int var2, int var3, int var4) {
++		if(var2 >= -32000000 && var4 >= -32000000 && var2 < 32000000 && var4 <= 32000000) {
++			if(var3 < 0) {
++				return 15;
++			} else if(var3 >= 128) {
++				return 15;
++			} else if(!this.c(var2 >>> 4, var4 >>> 4)) {
++				return 0;
++			} else {
++				d var5 = this.d(var2 >>> 4, var4 >>> 4);
++				var2 &= 15;
++				var4 &= 15;
++				return var5.a(var1, var2, var3, var4);
++			}
++		} else {
++			return 15;
++		}
++	}
++
++	public final float e(int var1, int var2, int var3) {
++		return o[this.d(var1, var2, var3)];
++	}
++
++	public final MovingObjectPosition a(Vec3D var1, Vec3D var2) {
++		if(!Double.isNaN(var1.xCoord) && !Double.isNaN(var1.yCoord) && !Double.isNaN(var1.zCoord)) {
++			if(!Double.isNaN(var2.xCoord) && !Double.isNaN(var2.yCoord) && !Double.isNaN(var2.zCoord)) {
++				int var3 = MathHelper.floor_double(var2.xCoord);
++				int var4 = MathHelper.floor_double(var2.yCoord);
++				int var5 = MathHelper.floor_double(var2.zCoord);
++				int var6 = MathHelper.floor_double(var1.xCoord);
++				int var7 = MathHelper.floor_double(var1.yCoord);
++				int var8 = MathHelper.floor_double(var1.zCoord);
++				int var9 = 20;
++
++				Block var11;
++				int var30;
++				MovingObjectPosition var31;
++				do {
++					if(var9-- < 0) {
++						return null;
++					}
++
++					if(Double.isNaN(var1.xCoord) || Double.isNaN(var1.yCoord) || Double.isNaN(var1.zCoord)) {
++						return null;
++					}
++
++					if(var6 == var3 && var7 == var4 && var8 == var5) {
++						return null;
++					}
++
++					double var10 = 999.0D;
++					double var12 = 999.0D;
++					double var14 = 999.0D;
++					if(var3 > var6) {
++						var10 = (double)var6 + 1.0D;
++					}
++
++					if(var3 < var6) {
++						var10 = (double)var6;
++					}
++
++					if(var4 > var7) {
++						var12 = (double)var7 + 1.0D;
++					}
++
++					if(var4 < var7) {
++						var12 = (double)var7;
++					}
++
++					if(var5 > var8) {
++						var14 = (double)var8 + 1.0D;
++					}
++
++					if(var5 < var8) {
++						var14 = (double)var8;
++					}
++
++					double var16 = 999.0D;
++					double var18 = 999.0D;
++					double var20 = 999.0D;
++					double var22 = var2.xCoord - var1.xCoord;
++					double var24 = var2.yCoord - var1.yCoord;
++					double var26 = var2.zCoord - var1.zCoord;
++					if(var10 != 999.0D) {
++						var16 = (var10 - var1.xCoord) / var22;
++					}
++
++					if(var12 != 999.0D) {
++						var18 = (var12 - var1.yCoord) / var24;
++					}
++
++					if(var14 != 999.0D) {
++						var20 = (var14 - var1.zCoord) / var26;
++					}
++
++					byte var28;
++					if(var16 < var18 && var16 < var20) {
++						if(var3 > var6) {
++							var28 = 4;
++						} else {
++							var28 = 5;
++						}
++
++						var1.xCoord = var10;
++						var1.yCoord += var24 * var16;
++						var1.zCoord += var26 * var16;
++					} else if(var18 < var20) {
++						if(var4 > var7) {
++							var28 = 0;
++						} else {
++							var28 = 1;
++						}
++
++						var1.xCoord += var22 * var18;
++						var1.yCoord = var12;
++						var1.zCoord += var26 * var18;
++					} else {
++						if(var5 > var8) {
++							var28 = 2;
++						} else {
++							var28 = 3;
++						}
++
++						var1.xCoord += var22 * var20;
++						var1.yCoord += var24 * var20;
++						var1.zCoord = var14;
++					}
++
++					Vec3D var29;
++					var6 = (int)((var29 = new Vec3D(var1.xCoord, var1.yCoord, var1.zCoord)).xCoord = (double)MathHelper.floor_double(var1.xCoord));
++					if(var28 == 5) {
++						--var6;
++						++var29.xCoord;
++					}
++
++					var7 = (int)(var29.yCoord = (double)MathHelper.floor_double(var1.yCoord));
++					if(var28 == 1) {
++						--var7;
++						++var29.yCoord;
++					}
++
++					var8 = (int)(var29.zCoord = (double)MathHelper.floor_double(var1.zCoord));
++					if(var28 == 3) {
++						--var8;
++						++var29.zCoord;
++					}
++
++					var30 = this.getBlockAt(var6, var7, var8);
++					var11 = Block.blocksList[var30];
++				} while(var30 <= 0 || !var11.isCollidable() || (var31 = var11.a(this, var6, var7, var8, var1, var2)) == null);
++
++				return var31;
++			} else {
++				return null;
++			}
++		} else {
++			return null;
++		}
++	}
++
++	public final void a(Entity var1, String var2, float var3, float var4) {
++		for(int var5 = 0; var5 < this.p.size(); ++var5) {
++			float var6 = 16.0F;
++			if(var3 > 1.0F) {
++				var6 = 16.0F * var3;
++			}
++
++			if(this.noiseGen1.getDistanceToEntity(var1) < (double)(var6 * var6)) {
++				((IWorldAccess)this.p.get(var5)).playSound(var2, var1.posX, var1.posY - (double)var1.yOffset, var1.posZ, var3, var4);
++			}
++		}
++
++	}
++
++	public final void a(double var1, double var3, double var5, String var7, float var8, float var9) {
++		try {
++			for(int var10 = 0; var10 < this.p.size(); ++var10) {
++				float var11 = 16.0F;
++				if(var8 > 1.0F) {
++					var11 = 16.0F * var8;
++				}
++
++				double var12 = var1 - this.noiseGen1.posX;
++				double var14 = var3 - this.noiseGen1.posY;
++				double var16 = var5 - this.noiseGen1.posZ;
++				if(var12 * var12 + var14 * var14 + var16 * var16 < (double)(var11 * var11)) {
++					((IWorldAccess)this.p.get(var10)).playSound(var7, var1, var3, var5, var8, var9);
++				}
++			}
++
++		} catch (Exception var18) {
++			var18.printStackTrace();
++		}
++	}
++
++	public final void a(String var1, double var2, double var4, double var6, double var8, double var10, double var12) {
++		for(int var14 = 0; var14 < this.p.size(); ++var14) {
++			((IWorldAccess)this.p.get(var14)).spawnParticle(var1, var2, var4, var6, var8, var10, var12);
++		}
++
++	}
++
++	public final void a(IWorldAccess var1) {
++		this.p.add(var1);
++	}
++
++	public final void b(IWorldAccess var1) {
++		this.p.remove(var1);
++	}
++
++	public final List a(AxisAlignedBB var1) {
++		ArrayList var2 = new ArrayList();
++		int var3 = MathHelper.floor_double(var1.minX);
++		int var4 = MathHelper.floor_double(var1.maxX + 1.0D);
++		int var5 = MathHelper.floor_double(var1.minY);
++		int var6 = MathHelper.floor_double(var1.maxY + 1.0D);
++		int var7 = MathHelper.floor_double(var1.minZ);
++		int var8 = MathHelper.floor_double(var1.maxZ + 1.0D);
++
++		for(var3 = var3; var3 < var4; ++var3) {
++			for(int var9 = var5; var9 < var6; ++var9) {
++				for(int var10 = var7; var10 < var8; ++var10) {
++					Block var11;
++					AxisAlignedBB var14;
++					if((var11 = Block.blocksList[this.getBlockAt(var3, var9, var10)]) != null && (var14 = var11.getCollisionBoundingBoxFromPool(var3, var9, var10)) != null && (var14.maxX >= var1.minX && var14.minX <= var1.maxX ? (var14.maxY >= var1.minY && var14.minY <= var1.maxY ? var14.maxZ >= var1.minZ && var14.minZ <= var1.maxZ : false) : false)) {
++						var2.add(var14);
++					}
++				}
++			}
++		}
++
++		return var2;
++	}
++
++	public final Vec3D a(float var1) {
++		if((var1 = MathHelper.cos(this.b(var1) * 3.1415927F * 2.0F) * 2.0F + 0.5F) < 0.0F) {
++			var1 = 0.0F;
++		}
++
++		if(var1 > 1.0F) {
++			var1 = 1.0F;
++		}
++
++		float var2 = (float)(this.k >> 16 & 255L) / 255.0F;
++		float var3 = (float)(this.k >> 8 & 255L) / 255.0F;
++		float var4 = (float)(this.k & 255L) / 255.0F;
++		var2 *= var1;
++		var3 *= var1;
++		var4 *= var1;
++		return new Vec3D((double)var2, (double)var3, (double)var4);
++	}
++
++	public final float b(float var1) {
++		return ((float)this.j + var1) / 12000.0F - 0.15F;
++	}
++
++	public final Vec3D c(float var1) {
++		if((var1 = MathHelper.cos(this.b(var1) * 3.1415927F * 2.0F) * 2.0F + 0.5F) < 0.0F) {
++			var1 = 0.0F;
++		}
++
++		if(var1 > 1.0F) {
++			var1 = 1.0F;
++		}
++
++		float var2 = (float)(this.m >> 16 & 255L) / 255.0F;
++		float var3 = (float)(this.m >> 8 & 255L) / 255.0F;
++		float var4 = (float)(this.m & 255L) / 255.0F;
++		var2 *= var1 * 0.9F + 0.1F;
++		var3 *= var1 * 0.9F + 0.1F;
++		var4 *= var1 * 0.85F + 0.15F;
++		return new Vec3D((double)var2, (double)var3, (double)var4);
++	}
++
++	public final Vec3D d(float var1) {
++		if((var1 = MathHelper.cos(this.b(var1) * 3.1415927F * 2.0F) * 2.0F + 0.5F) < 0.0F) {
++			var1 = 0.0F;
++		}
++
++		if(var1 > 1.0F) {
++			var1 = 1.0F;
++		}
++
++		float var2 = (float)(this.l >> 16 & 255L) / 255.0F;
++		float var3 = (float)(this.l >> 8 & 255L) / 255.0F;
++		float var4 = (float)(this.l & 255L) / 255.0F;
++		var2 *= var1 * 0.94F + 0.06F;
++		var3 *= var1 * 0.94F + 0.06F;
++		var4 *= var1 * 0.91F + 0.09F;
++		return new Vec3D((double)var2, (double)var3, (double)var4);
++	}
++
++	public final float e(float var1) {
++		var1 = this.b(var1);
++		if((var1 = 1.0F - (MathHelper.cos(var1 * 3.1415927F * 2.0F) * 2.0F + 0.75F)) < 0.0F) {
++			var1 = 0.0F;
++		}
++
++		if(var1 > 1.0F) {
++			var1 = 1.0F;
++		}
++
++		return var1 * var1 * 0.5F;
++	}
++
++	public final boolean b(AxisAlignedBB var1) {
++		int var2 = MathHelper.floor_double(var1.minX);
++		int var3 = MathHelper.floor_double(var1.maxX + 1.0D);
++		int var4 = MathHelper.floor_double(var1.minY);
++		int var5 = MathHelper.floor_double(var1.maxY + 1.0D);
++		int var6 = MathHelper.floor_double(var1.minZ);
++		int var7 = MathHelper.floor_double(var1.maxZ + 1.0D);
++		if(var1.minX < 0.0D) {
++			--var2;
++		}
++
++		if(var1.minY < 0.0D) {
++			--var4;
++		}
++
++		if(var1.minZ < 0.0D) {
++			--var6;
++		}
++
++		for(int var10 = var2; var10 < var3; ++var10) {
++			for(var2 = var4; var2 < var5; ++var2) {
++				for(int var8 = var6; var8 < var7; ++var8) {
++					Block var9;
++					if((var9 = Block.blocksList[this.getBlockAt(var10, var2, var8)]) != null && var9.soundGravelFootstep.getIsSolid()) {
++						return true;
++					}
++				}
++			}
++		}
++
++		return false;
++	}
++
++	public final boolean c(AxisAlignedBB var1) {
++		int var2 = MathHelper.floor_double(var1.minX);
++		int var3 = MathHelper.floor_double(var1.maxX + 1.0D);
++		int var4 = MathHelper.floor_double(var1.minY);
++		int var5 = MathHelper.floor_double(var1.maxY + 1.0D);
++		int var6 = MathHelper.floor_double(var1.minZ);
++		int var10 = MathHelper.floor_double(var1.maxZ + 1.0D);
++
++		for(var2 = var2; var2 < var3; ++var2) {
++			for(int var7 = var4; var7 < var5; ++var7) {
++				for(int var8 = var6; var8 < var10; ++var8) {
++					int var9;
++					if((var9 = this.getBlockAt(var2, var7, var8)) == Block.waterSource.minX || var9 == Block.lavaStill.minX || var9 == Block.sand.minX) {
++						return true;
++					}
++				}
++			}
++		}
++
++		return false;
++	}
++
++	public final boolean a(AxisAlignedBB var1, Material var2) {
++		int var3 = MathHelper.floor_double(var1.minX);
++		int var4 = MathHelper.floor_double(var1.maxX + 1.0D);
++		int var5 = MathHelper.floor_double(var1.minY);
++		int var6 = MathHelper.floor_double(var1.maxY + 1.0D);
++		int var7 = MathHelper.floor_double(var1.minZ);
++		int var11 = MathHelper.floor_double(var1.maxZ + 1.0D);
++
++		for(var3 = var3; var3 < var4; ++var3) {
++			for(int var8 = var5; var8 < var6; ++var8) {
++				for(int var9 = var7; var9 < var11; ++var9) {
++					Block var10;
++					if((var10 = Block.blocksList[this.getBlockAt(var3, var8, var9)]) != null && var10.soundGravelFootstep == var2) {
++						return true;
++					}
++				}
++			}
++		}
++
++		return false;
++	}
++
++	public static String a() {
++		return "";
++	}
++
++	public final Entity b() {
++		return this.noiseGen1;
++	}
++
++	public final boolean f(int var1, int var2, int var3) {
++		Block var4;
++		return (var4 = Block.blocksList[this.getBlockAt(var1, var2, var3)]) == null ? false : var4.isOpaqueCube();
++	}
++
++	public final void c() {
++		while(this.i.size() > 0) {
++			UnknownClass var10000 = (UnknownClass)this.i.remove(this.i.size() - 1);
++			World var2 = this;
++			UnknownClass var1 = var10000;
++
++			for(int var3 = var10000.playerEntity; var3 <= var1.rand; ++var3) {
++				for(int var4 = var1.pathFinder; var4 <= var1.spawnY; ++var4) {
++					if(var2.a(var3, var4)) {
++						for(int var5 = var1.difficultySetting; var5 <= var1.spawnX; ++var5) {
++							int var6 = var2.a(var1.entityMap, var3, var5, var4);
++							int var7 = var2.getBlockAt(var3, var5, var4);
++							int var8;
++							if((var8 = Block.isBlockContainer[var7]) == 0) {
++								var8 = 1;
++							}
++
++							int var9 = 0;
++							int var11;
++							int var13;
++							if(var1.entityMap != EntityMapSlot.xSlot) {
++								if(var1.entityMap == EntityMapSlot.ySlot) {
++									var9 = Block.stone[var7];
++								}
++							} else {
++								boolean var18;
++								if(var3 >= -32000000 && var4 >= -32000000 && var3 < 32000000 && var4 <= 32000000) {
++									if(var5 < 0) {
++										var18 = false;
++									} else if(var5 >= 128) {
++										var18 = true;
++									} else if(!var2.c(var3 >>> 4, var4 >>> 4)) {
++										var18 = false;
++									} else {
++										d var14 = var2.d(var3 >>> 4, var4 >>> 4);
++										var11 = var3 & 15;
++										var13 = var4 & 15;
++										var18 = var14.c(var11, var5, var13);
++									}
++								} else {
++									var18 = false;
++								}
++
++								if(var18) {
++									var9 = 15;
++								}
++							}
++
++							int var12;
++							int var17;
++							if(var8 >= 15 && var9 == 0) {
++								var7 = 0;
++							} else {
++								var7 = var2.a(var1.entityMap, var3 - 1, var5, var4);
++								int var10 = var2.a(var1.entityMap, var3 + 1, var5, var4);
++								var11 = var2.a(var1.entityMap, var3, var5 - 1, var4);
++								var12 = var2.a(var1.entityMap, var3, var5 + 1, var4);
++								var13 = var2.a(var1.entityMap, var3, var5, var4 - 1);
++								var17 = var2.a(var1.entityMap, var3, var5, var4 + 1);
++								var7 = var7;
++								if(var10 > var7) {
++									var7 = var10;
++								}
++
++								if(var11 > var7) {
++									var7 = var11;
++								}
++
++								if(var12 > var7) {
++									var7 = var12;
++								}
++
++								if(var13 > var7) {
++									var7 = var13;
++								}
++
++								if(var17 > var7) {
++									var7 = var17;
++								}
++
++								if((var7 -= var8) < 0) {
++									var7 = 0;
++								}
++
++								if(var9 > var7) {
++									var7 = var9;
++								}
++							}
++
++							if(var6 != var7) {
++								var17 = var4;
++								var13 = var5;
++								var12 = var3;
++								EntityMapSlot var16 = var1.entityMap;
++								World var15 = var2;
++								if(var3 >= -32000000 && var4 >= -32000000 && var3 < 32000000 && var4 <= 32000000 && var5 >= 0 && var5 < 128 && var2.c(var3 >>> 4, var4 >>> 4)) {
++									var2.d(var3 >>> 4, var4 >>> 4).a(var16, var3 & 15, var5, var4 & 15, var7);
++
++									for(var6 = 0; var6 < var15.p.size(); ++var6) {
++										((IWorldAccess)var15.p.get(var6)).markBlockAndNeighborsNeedsUpdate(var12, var13, var17);
++									}
++								}
++
++								if(--var7 < 0) {
++									var7 = 0;
++								}
++
++								var2.a(var1.entityMap, var3 - 1, var5, var4, var7);
++								var2.a(var1.entityMap, var3 + 1, var5, var4, var7);
++								var2.a(var1.entityMap, var3, var5 - 1, var4, var7);
++								var2.a(var1.entityMap, var3, var5 + 1, var4, var7);
++								var2.a(var1.entityMap, var3, var5, var4 - 1, var7);
++								var2.a(var1.entityMap, var3, var5, var4 + 1, var7);
++							}
++						}
++					}
++				}
++			}
++		}
++
++	}
++
++	public final void a(EntityMapSlot var1, int var2, int var3, int var4, int var5, int var6, int var7) {
++		this.i.add(new UnknownClass(var1, var2, var3, var4, var5, var6, var7));
++	}
++
++	public final void d() {
++		float var1 = 1.0F;
++		var1 = this.b(1.0F);
++		if((var1 = 1.0F - (MathHelper.cos(var1 * 3.1415927F * 2.0F) * 2.0F + 0.5F)) < 0.0F) {
++			var1 = 0.0F;
++		}
++
++		if(var1 > 1.0F) {
++			var1 = 1.0F;
++		}
++
++		int var2;
++		if((var2 = (int)(var1 * 13.0F)) != this.n) {
++			this.n = var2;
++			this.q.a();
++		}
++
++		this.noiseGen1.lastTickPosX = this.noiseGen1.posX;
++		this.noiseGen1.lastTickPosY = this.noiseGen1.posY;
++		this.noiseGen1.lastTickPosZ = this.noiseGen1.posZ;
++		this.noiseGen1.onUpdate();
++		this.j = (this.j + 1) % 12000;
++	}
++
++	static {
++		for(int var0 = 0; var0 <= 15; ++var0) {
++			float var1 = 1.0F - (float)var0 / 15.0F;
++			o[var0] = (1.0F - var1) / (var1 * 3.0F + 1.0F) * 0.95F + 0.05F;
++		}
++
+ 	}
+ }
+Only in C:\Users\micha\RetroMCP\src - Copy/minecraft/net/minecraft: unknown
